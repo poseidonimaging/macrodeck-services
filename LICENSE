@@ -1,0 +1,15 @@
+MacroDeck Services is released under the GNU General Public License (GPL) with the following changes:
+
+    * MacroDeck is not bound by the GPL
+    * All others will be bound by the GPL unless authorized by MacroDeck
+    * All others must make their modified source available free of charge
+	  unless otherwise authorized by MacroDeck 
+
+These changes are not intended to limit what you can do with the software. If you want to use our services
+API in your Rails application, feel free to do so (given that you follow the GPL). If you modify our
+sourcecode, we'd like to be able to take whatever improvements you've made and use them for the benefit
+of everyone (if we wanted). We feel that these extra licensing terms protect everyone's rights as a whole
+somewhat better than the GPL alone. Additionally, we are not bound by the GPL because we will be linking to
+Services in a non-GPL-compatible way.
+
+The GPL is available in LICENSE.GPL.
