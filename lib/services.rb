@@ -8,6 +8,7 @@ require "base_service"
 require "default_uuids"
 require "local_uuids"
 require "default_permissions" # Default permissions
+require "metadata" # metadata object (normally we use hashes, but there are cases where we need a solid object)
 
 include ServicesModule::DefaultPermissions
 include ServicesModule::DefaultUUIDs
