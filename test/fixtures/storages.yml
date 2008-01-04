@@ -1,0 +1,14 @@
+storage1:
+    id: 1
+    objectid: "0001"
+    parent: "0003"
+    objecttype: "00000000-227b-4a06-9400-79e941d2fd45"
+storage2:
+    id: 2
+    objectid: "0002"
+    objecttype: "00000000-227b-4a06-9400-79e941d2fd45"
+    data: "test"
+storage3:
+    id: 3
+    objectid: "0003"
+    objecttype: "438754d6-227b-4a06-9400-79e941d2fd45"

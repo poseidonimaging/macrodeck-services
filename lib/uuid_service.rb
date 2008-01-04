@@ -1,7 +1,9 @@
 # This service generates UUIDs for other services.
 # It uses the Ruby Gem "uuidtools".
 
-require_gem "uuidtools", ">= 1.0.0"
+# For some reason, the latest Ruby refuses to treat UUID as a class
+# So we renamed the class to UUIDTools and moved it to our repository.
+require "uuid"
 
 class UUIDService < BaseService
 	@serviceAuthor = "Keith Gable <ziggy@ignition-project.com>"
@@ -14,7 +16,7 @@ class UUIDService < BaseService
 	
 	# Returns a string containing a random UUID.
 	def self.generateUUID()
-		return UUID.random_create.to_s
+		return UUIDTools.random_create.to_s
 	end
 	
 	# Looks up the uuid and returns a human readable

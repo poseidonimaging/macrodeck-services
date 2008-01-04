@@ -1,5 +1,5 @@
 require 'test_helper'
-require '../init.rb'
+require 'services'
 
 class SampleMetadataClass
   attr_reader :type, :creator

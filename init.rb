@@ -1,32 +1,41 @@
-# This file is a stub for Rails so it loads our
-# "real" library.
+###############################################################################
+# MACRODECK SERVICES
+###############################################################################
+# This file is a stub for Rails so it loads our "real" library.
+# 
+# $Id$
 
 require "services"
 require "acts_as_ferret"
+
 #require "rubygems"
 #require_gem "activemerchant"
 
-class ActiveRecord::Base
+#### The following code DOESN'T WORK!
+#### Commented out by Zg on 28-Jun-2007
+#class ActiveRecord::Base
+#
+# def self.checkUUID(uuid)
+#    #puts self.to_s 
+#    #puts uuid    
+#    case self.to_s
+#      when 'ForumPost','ForumReply','Forum','ForumCategory','ForumBoard':         
+#        obj = find_by_uuid(uuid)
+#        return nil unless obj
+#        return obj.grouping == self::UUID ? obj : false 
+#      
+#      when 'DataItem':
+#        return find_by_dataid(uuid)
+#      when 'DataGroup', 'Profile':               
+#        find_by_groupingid(uuid)
+#      else 
+#        return nil        
+#    end
+#  end
+#  
+#end
 
-  def self.checkUUID(uuid)
-    #puts self.to_s 
-    #puts uuid    
-    case self.to_s
-      when 'ForumPost','ForumReply','Forum','ForumCategory','ForumBoard':         
-        obj = find_by_uuid(uuid)
-        return nil unless obj
-        return obj.grouping == self::UUID ? obj : false 
-      
-      when 'DataItem':
-        return find_by_dataid(uuid)
-      when 'DataGroup', 'Profile':               
-        find_by_groupingid(uuid)
-      else 
-        return nil        
-    end
-  end
-  
-end
+# -- stuff done by eugene, not sure why it's here and commented out --
 
 # This is a method from Ruby Cookbook. It initializes the instance variables for us.
 # 

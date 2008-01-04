@@ -1,0 +1,16 @@
+places:
+  uuid: b7f1643b-292a-4149-ad64-0eefa8ff18bc
+  title: Places
+  description: MacroDeck Places
+  url_part: places
+united_states:
+  uuid: d5787ec9-f940-455e-bc37-7a5bb2683344
+  title: United States
+  description: Places in the United States
+  url_part: us
+  parent_uuid: b7f1643b-292a-4149-ad64-0eefa8ff18bc
+oklahoma:
+  uuid: 1ac47797-c771-414f-8396-334cd981a9df
+  title: Oklahoma
+  url_part: ok
+  parent_uuid: d5787ec9-f940-455e-bc37-7a5bb2683344

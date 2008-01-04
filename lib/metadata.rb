@@ -1,7 +1,7 @@
 class Metadata
-  attr_accessor :grouping, :type, :creator, :owner, :tags, :title, :creation, :description, :datacreator
+  attr_accessor :grouping, :type, :creator, :owner, :tags, :title, :creation, :description, :datacreator, :url_part
   
-  def initialize(grouping=nil, type=nil,creator=NOBODY,owner=NOBODY,tags=nil,title=nil,creation=nil,description=nil,datacreator=nil)
+  def initialize(grouping=nil, type=nil,creator=NOBODY,owner=NOBODY,tags=nil,title=nil,creation=nil,description=nil,datacreator=nil, url_part = nil)
     set_instance_variables(binding, *local_variables)    
     yield self if block_given?
   end

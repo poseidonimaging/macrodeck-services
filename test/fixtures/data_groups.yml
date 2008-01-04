@@ -1,6 +1,19 @@
 my_profile:
-  id: 1
   groupingtype: bf1d3af2-3437-489f-9f09-24151edeb827
   groupingid: 00000000-1111-2222-3333-444444444444
   owner: 3248ebfc-18c2-413e-baa8-34219408d289
-  creator: 7b7e7c62-0a56-4785-93d5-6e689c9793c9      
+  creator: 7b7e7c62-0a56-4785-93d5-6e689c9793c9
+city_tulsa:
+  groupingtype: b9291eac-c591-41ee-b3cd-d892ae6a9530
+  groupingid: bd427824-d13e-4e73-bc41-2719ba9bb345
+  title: Tulsa
+  category: 0576d7db-c9fd-4c83-8f2f-013aeaf8c5b9
+  owner: 7b7e7c62-0a56-4785-93d5-6e689c9793c9
+  creator: 7b7e7c62-0a56-4785-93d5-6e689c9793c9
+city_austin:
+  groupingtype: b9291eac-c591-41ee-b3cd-d892ae6a9530
+  groupingid: 65dc597f-cf87-44b4-a3cc-a7b1ee7eed81
+  title: Austin
+  category: 313d5578-f855-45a2-86dc-a6eaa313872a
+  owner: 7b7e7c62-0a56-4785-93d5-6e689c9793c9
+  creator: 7b7e7c62-0a56-4785-93d5-6e689c9793c9

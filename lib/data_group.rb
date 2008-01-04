@@ -3,100 +3,52 @@
 # and gives each group a type. Its columns are
 # similar to DataItem.
 
+# External files.
+require "data_service/data_group_common"
+
 class DataGroup < ActiveRecord::Base
 
-    acts_as_ferret :fields => [:tags, :description, :title]     
+# THE FOLLOWING METHODS ARE NO LONGER SUPPORTED AND HAVE BEEN REMOVED:
+# findGroupings
+# findGroupingsByCreator
+# findGroupingsByOwner
+# findGroupingsByParent
+#
+# Use find with :conditions instead!
 
-    # write time of group's creation to updated field
-    def after_create
-        updated = Time.new.to_i
-    end
+## DECLARATIONS ###############################################################
+	
+    acts_as_ferret :fields => [:tags, :description, :title]
+	before_create :set_creation_time, :set_uuid_if_not_set
+	before_save :set_updated_time
 
-    # write time of group's update to updated field
-    def after_update
-        updated = Time.new.to_i
-    end
- 
-    def uuid
-        self.groupingid 
-    end
-    
-    # It's just a alias to make this model close to DataItem 
-    def type
-        self.groupingtype
-    end
+## CLASS METHODS ##############################################################
+	
+	# Extend the class with the base class methods.
+	extend DataGroupCommon::ClassMethods
+	
+## INSTANCE METHODS ###########################################################
 
-    # update attibutes from metaData object
-    def loadMetadata(objMeta)
-        update_attributes(objMeta.to_hash)
-    end
-    
-    # fake proxy
-    def datacreator=(uuid)
-      nil
-    end
-    
-    # fake proxy
-    def creation=(value)
-      nil
-    end
-    
-    # fake proxy
-    def grouping=(uuid)
-      nil
-    end
-    
-	# Returns true if there are data items in this grouping.
-	def items?
-		ditems = DataItem.find(:all, :conditions => ["grouping = ?", groupingid])
-		if ditems != nil && ditems.length > 0
+	# Include common instance methods
+	include DataGroupCommon::InstanceMethods
+
+## PRIVATE INSTANCE METHODS ###################################################
+	
+	private
+		def set_updated_time
+			updated = Time.new.to_i
 			return true
-		else
-			return false
 		end
-	end
 
-	# Returns data items in this grouping
-	def items
-		ditems = DataItem.find(:all, :conditions => ["grouping = ?", groupingid])
-		return ditems
-	end
-
-	# Returns a human-readable version of the creation
-	def human_creation
-		if creation != nil
-			return Time.at(creation).strftime("%B %d, %Y at %I:%M %p")
-		else
-			return "Unknown"
+		def set_creation_time
+			creation = Time.new.to_i
+			return true
 		end
-	end
 
-	# Returns a human-readable version of the updated time.
-	def human_updated
-		if updated != nil
-			return Time.at(updated).strftime("%B %d, %Y at %I:%M %p")
-		else
-			return "Unknown"
+		def set_uuid_if_not_set
+			if uuid == nil || uuid == ""
+				uuid = UUIDService.generateUUID
+			end
+			return true
 		end
-	end
-
-	# Finds groupings by their type
-	def self.findGroupings(dataType, resultsToReturn = :all)
-		return self::find(resultsToReturn, :conditions => ["groupingtype = ?", dataType])
-	end
-	
-	# Finds groupings by type and their creator.
-	def self.findGroupingsByCreator(dataType, creator, resultsToReturn = :all)
-		return self::find(resultsToReturn, :conditions => ["groupingtype = ? AND creator = ?", dataType, creator])
-	end
-	
-	# Finds groupings by type and owner.
-	def self.findGroupingsByOwner(dataType, owner, resultsToReturn = :all)
-		return self::find(resultsToReturn, :conditions => ["groupingtype = ? AND owner = ?", dataType, owner])
-	end
-	
-	# Finds groupings by their type and parent
-	def self.findGroupingsByParent(dataType, parent, resultsToReturn = :all)
-		return self::find(resultsToReturn, :conditions => ["groupingtype = ? AND parent = ?", dataType, parent])
-	end
 end
