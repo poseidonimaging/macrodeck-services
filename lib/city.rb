@@ -8,7 +8,7 @@ class City < ActiveRecord::Base
 
 ## DECLARATIONS ###############################################################
 	
-    acts_as_ferret :fields => [:tags, :description, :title]
+	# broken # acts_as_ferret :fields => [:tags, :description, :title]
 	before_create :set_creator, :set_owner, :set_data_type, :set_creation_time, :set_uuid_if_not_set
 	before_save :set_updated_time, :set_data_type
 

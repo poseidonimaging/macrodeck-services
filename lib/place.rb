@@ -7,7 +7,7 @@ class Place < ActiveRecord::Base
     set_table_name 'data_items'
 
 ## DECLARATIONS ###############################################################
-    acts_as_ferret :fields => ['tags', 'description', 'title']
+	# broken # acts_as_ferret :fields => ['tags', 'description', 'title']
 	before_create :set_creation_time, :set_uuid_if_not_set
 	before_save :set_updated_time, :set_uuid_if_not_set
 
