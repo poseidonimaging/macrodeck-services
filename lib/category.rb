@@ -1,7 +1,6 @@
 class Category < ActiveRecord::Base
-    
 	# update attibutes from metaData object
-    def loadMetadata(objMeta)
+    def metadata=(objMeta)
         update_attributes(objMeta.to_hash)
     end
 
@@ -32,40 +31,29 @@ class Category < ActiveRecord::Base
 	end
 
 	# Returns a Category for the child name specified (either by title or url_part)
-	def getChild(childName)
-		c = Category.find(:first, :conditions => ["parent_uuid = ? AND (url_part LIKE ? OR title LIKE ?)", self.uuid, childName, childName])
-		if c != nil
-			return c
+	def child(childName)
+		# Caching for children.
+		if @child.nil?
+			@child = {}
+		end
+		if @child[childName].nil?
+			@child[childName] = Category.find(:first, :conditions => ["parent_uuid = ? AND (url_part LIKE ? OR title LIKE ?)", self.uuid, childName, childName])
+		end
+		if @child[childName] != nil
+			return @child[childName]
 		else
 			return nil
 		end
 	end
 
-	# DEPRECIATED: Gets a child by its url_part
-	# FIXME: Everything that calls this should call getChild instead.
-	def getChildByURL(url_part)
-		return Category.find(:first, :conditions => ["parent_uuid = ? AND url_part = ?", self.uuid, url_part])
-	end
-
 	# Creates a child category
-	def createChild(objMetadata = Metadata.new)
+	def create_child(objMetadata = Metadata.new)
 		child = Category.new do |c|
 			c.uuid = UUIDService.generateUUID
-			c.loadMetadata(objMetadata)
+			c.metadata = objMetadata
 			c.parent_uuid = self.uuid
 		end
 		child.save!
 		return child
-	end
-
-	# Returns true if this category has the child specified.
-	# Checks url_part and title. Case-insensitive.
-	def hasChild?(childName)
-		c = Category.find(:first, :conditions => ["parent_uuid = ? AND (url_part LIKE ? OR title LIKE ?)", self.uuid, childName, childName])
-		if c != nil
-			return true
-		else
-			return false
-		end
 	end
 end

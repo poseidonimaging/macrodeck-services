@@ -1,7 +1,8 @@
 # There's nothing that needs to be done really so this doesn't do anything yet.
 
-require "comments"
-require "comment"
+require "comment_service/comments"
+require "comment_service/comment"
+require "comment_service/acts_as_macrodeck_wall"
 
 class CommentService < BaseService
 	@serviceAuthor = "Keith Gable <ziggy@ignition-project.com>"
@@ -9,7 +10,7 @@ class CommentService < BaseService
 	@serviceName = "CommentService"	
 	@serviceVersionMajor = 0
 	@serviceVersionMinor = 3
-	@serviceVersionRevision = 20071230
+	@serviceVersionRevision = 20080317
 	@serviceUUID = "880c9dea-9b92-4ffe-a049-d10a095bb0d3"
 end
 

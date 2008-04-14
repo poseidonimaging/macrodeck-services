@@ -1,0 +1,28 @@
+class DataObject < ActiveRecord::Base
+	# Callbacks
+	before_validation :set_uuid_if_nil
+
+	# data_objects is a tree
+	acts_as_tree :order => "title"
+	
+	# Foreign Key definitions
+	belongs_to	:category
+	belongs_to	:data_sources
+	# TODO: belongs_to	:application
+	belongs_to	:created_by,	:class_name => "User", :foreign_key => "created_by_id"
+	belongs_to	:updated_by,	:class_name => "User", :foreign_key => "updated_by_id"
+	belongs_to	:owned_by,		:class_name => "User", :foreign_key => "owned_by_id"
+	serialize	:extended_data
+
+	# Validations
+	validates_presence_of	:uuid
+	validates_uniqueness_of	:uuid
+
+	private
+		def set_uuid_if_nil
+			if self.uuid.nil? || self.uuid.empty?
+				self.uuid = UUIDService.generateUUID()
+			end
+			return true
+		end
+end

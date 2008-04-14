@@ -6,9 +6,9 @@
 
 require 'digest/md5'
 require 'digest/sha2'
-require 'user'
-require 'group'
-require 'group_member'
+require 'user_service/user'
+require 'user_service/group'
+require 'user_service/group_member'
 
 class UserService < BaseService
 	@serviceAuthor = "Keith Gable <ziggy@ignition-project.com>"
@@ -16,7 +16,7 @@ class UserService < BaseService
 	@serviceName = "UserService"	
 	@serviceVersionMajor = 0
 	@serviceVersionMinor = 3
-	@serviceVersionRevision = 20070709
+	@serviceVersionRevision = 20080209
 	@serviceUUID = "8d6e8d29-55b0-4d74-bf71-84b2d653ba1f"
 
 	# Depreciated methods

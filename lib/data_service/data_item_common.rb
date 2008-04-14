@@ -4,54 +4,11 @@ module DataItemCommon
 
 	# DataItem class methods
 	module ClassMethods
-
-		# Finds a specific data item based on its UUID
-		# FIXME: This is stupid and already done for us as find_by_uuid.
-		def getItem(dataID)
-			return self.find(:first, :conditions => ["dataid = ?", dataID])
-		end
-
-		# Returns true if the item specified exists.
-		# I think you can figure out what it returns if it doesn't exist..
-		def isItem?(dataID)
-			i = self.getItem(dataID)
-			if i != nil
-				return true
-			else
-				return false
-			end
-		end
-
-		# Wrapper function that finds by dataid instead but makes it easier for me to write
-		# less stupid code.
-		def find_by_uuid(value)
-			return self.find(:first, :conditions => ["dataid = ?", value])
-		end
+		#belongs_to :data_group
 	end
 
 	# DataItem instance methods
-	module InstanceMethods
-
-		# Provides a transparent interface to get the item's UUID (stored as dataid)
-		def uuid
-			self.dataid
-		end
-
-		# Set the UUID of the item
-		def uuid=(item_uuid)
-			self.dataid = item_uuid
-		end
-
-		# Returns the data type of the item
-		def type
-			self.datatype
-		end
-		
-		# Sets the type of the item.
-		def type=(type_uuid)
-			self.datatype = type_uuid
-		end
-		
+	module InstanceMethods		
 		# FIXME: Why is this here? What calls this? Eugene...!
 		def context(&block)
 			instance_eval(&block)       
@@ -123,67 +80,25 @@ module DataItemCommon
 		# A child DataGroup is one whose `parent` field is
 		# set to the UUID of this item.
 		def children?
-			if @children.nil?
-				@children = DataGroup.find(:all, :conditions => ["parent = ?", dataid])
-			end
-			if @children != nil && @children.length > 0
+			if self.children != nil && self.children.length > 0
 				return true
 			else
 				return false
 			end
-		end
-
-		# Is this DataItem on a quest to find its parents? You won't find
-		# out until you call this method!
-		def parent?
-			if @parent.nil?
-				@parent = DataGroup.find(:first, :conditions => ["groupingid = ?", grouping])
-			end
-			if @parent != nil
-				return true
-			else
-				return false
-			end
-		end
-
-		# Returns this data item's parent group
-		def parent
-			if @parent.nil?
-				@parent = DataGroup.find(:first, :conditions => ["groupingid = ?", grouping])
-			end
-			return @parent
 		end
 
 		# Returns children DataGroups
 		def children
 			if @children.nil?
-				@children = DataGroup.find(:all, :conditions => ["parent = ?", dataid])
+				@children = DataGroup.find(:all, :conditions => { :parent_uuid => self.uuid })
 			end
 			return @children
-		end
-
-		# Returns a human-readable version of the creation
-		def human_creation
-			if creation != nil
-				return Time.at(creation).strftime("%B %d, %Y at %I:%M %p")
-			else
-				return "Unknown"
-			end
-		end
-
-		# Returns a human-readable version of the updated time.
-		def human_updated
-			if updated != nil
-				return Time.at(updated).strftime("%B %d, %Y at %I:%M %p")
-			else
-				return "Unknown"
-			end
 		end
 
 		# Returns a User for the creator
 		def created_by_user
 			if @created_by_user.nil?
-				@created_by_user = User.find_by_uuid(self.creator)
+				@created_by_user = User.find_by_uuid(self.created_by)
 			end
 			return @created_by_user
 		end
@@ -191,7 +106,7 @@ module DataItemCommon
 		# Returns a User for the owner
 		def owned_by_user
 			if @owned_by_user.nil?
-				@owned_by_user = User.find_by_uuid(self.owner)
+				@owned_by_user = User.find_by_uuid(self.owned_by)
 			end
 			return @owned_by_user
 		end

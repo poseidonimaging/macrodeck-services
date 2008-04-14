@@ -20,6 +20,7 @@ class Services
 	# Starts a service from fileName.
 	# Returns true if successful, false if service could not be loaded, and nil if some other error occured.
 	def Services.startService(fileName)
+		puts "--- Attempting to start Service #{fileName}"
 		begin
 			require fileName
 			return true
@@ -40,7 +41,8 @@ class Services
 		author = serviceObj.serviceAuthor
 		servicehash = Hash.new
 		servicehash = { :name => name, :version => { :major => versionMajor, :minor => versionMinor, :revision => versionRevision }, :uuid => uuid, :id => id, :class => serviceObj, :author => author }
-		@@loadedServices = @@loadedServices << servicehash
+		@@loadedServices << servicehash
+		puts "*** Registered service #{name} (#{id})"
 		return nil
 	end
 

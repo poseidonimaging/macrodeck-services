@@ -2,9 +2,9 @@
 # the Places application.
 
 require "category"
-require "city"
-require "place"
-require "place_metadata"
+require "places_service/city"
+require "places_service/place"
+require "places_service/place_metadata"
 
 class PlacesService < BaseService
 	@serviceAuthor = "Keith Gable <ziggy@ignition-project.com>"
@@ -12,7 +12,7 @@ class PlacesService < BaseService
 	@serviceName = "PlacesService"	
 	@serviceVersionMajor = 0
 	@serviceVersionMinor = 3
-	@serviceVersionRevision = 20071116
+	@serviceVersionRevision = 20080317
 	@serviceUUID = "4c8c7deb-7e7b-485b-a467-6b7b195895fd"
 
 	# Returns true if the city exists, false if the city does not exist.
@@ -36,8 +36,8 @@ class PlacesService < BaseService
 			return false
 		end
 
-		# Now, does the state category have a child named city_name? Return false unless it does.
-		unless state_category.hasChild?(city_name)
+		# Now, does the state category have a child named city_name? If not, return false.
+		if state_category.child(city_name).nil?
 			return false
 		end
 
@@ -66,14 +66,14 @@ class PlacesService < BaseService
 			return nil
 		end
 
-		# Now, does the state category have a child named city_name? Return nil unless it does.
-		unless state_category.hasChild?(city_name)
+		# Now, does the state category have a child named city_name? Return nil if it doesn't.
+		if state_category.child(city_name).nil?
 			return nil
 		end
 
 		# The city exists, now get the child category and get the city object.
-		city_category = state_category.getChild(city_name)
-		city = City.find_by_category(city_category.uuid)
+		city_category = state_category.child(city_name)
+		city = City.find_by_category_id(city_category.id)
 		return city
 	end
 
@@ -104,7 +104,7 @@ class PlacesService < BaseService
 		end
 
 		# Create a child Category of state_category
-		city_category = self.getStateCategory(state).createChild({ :title => city_name })
+		city_category = self.getStateCategory(state).create_child({ :title => city_name })
 		
 		if city_category == nil
 			raise "PlacesService critical error: createCity could not create a city category for #{city_name}, #{state}"
@@ -118,13 +118,8 @@ class PlacesService < BaseService
 		# Now create a city
 		city = City.new do |c|
 			c.uuid = UUIDService.generateUUID
-			c.creation = Time.now.to_i
-			c.category = city_category.uuid
+			c.category_id = city_category.id
 			c.title = city_name
-			c.groupingtype = DTYPE_CITY
-			# MacroDeck owns cities.
-			c.creator = CREATOR_MACRODECK
-			c.owner = CREATOR_MACRODECK
 		end
 		city.save!
 
@@ -134,7 +129,7 @@ class PlacesService < BaseService
 	# Returns a list of states as categories.
 	def self.getUSStates()
 		places = Category.find(:first, :conditions => ["parent_uuid IS NULL AND url_part = ?", "places"])
-		country = places.getChildByURL("us")
+		country = places.child("us")
 
 		if country != nil
 			states = country.children
