@@ -27,7 +27,7 @@ class Event < DataObject
 	# :monthly (occurs on same day of month for every month afterwards)
 	# :none (event is not recurring)
 	def recurrence=(value)
-		if value != :weekly || value != :monthly || value != :none
+		if value != :weekly || value != :monthly || value != :none || value != :yearly || value != :every_n_days || value != :monthly_nth_nday
 			raise ArgumentError, "recurrence must be a valid symbol"
 		else
 			self.extended_data[:recurrence] = value
@@ -106,5 +106,80 @@ class Event < DataObject
 	# FIXME
 	def url_part
 		return uuid
+	end
+
+	# returns true if the event is over with, false otherwise
+	def concluded?
+		# initialize values
+		dtstart = Time.at(self.extended_data[:start_time])
+
+		if self.extended_data[:no_end_time] != nil && self.extended_data[:no_end_time] != true
+			dtend = Time.at(self.extended_data[:end_time])
+		else
+			dtend = nil
+		end
+
+		if (dtstart && dtend) && dtend < Time.new
+			# event ended
+			return true
+		elsif (dtstart && !dtend) && (dtstart + 21600) < Time.new
+			# event started more than 6 hours (21600 seconds) ago
+			return true
+		else
+			# event not concluded yet
+			return false
+		end
+	end
+	
+	# processes recurrence - will always run, doesn't check event is in the past. use with:
+	# if event.concluded? then event.process_recurrence
+	#
+	# we'll do this manually cause as someone on IRC pointed out, doing it EVERY time is slow and will
+	# cause problems. so Calendar's event roll stuff will have to be updated to process recurrence
+	# if needed
+	def process_recurrence
+		if self.extended_data != nil && self.extended_data[:recurrence] != nil && self.extended_data[:recurrence] != :none
+			# initialize values
+			dtstart = Time.at(self.extended_data[:start_time])
+
+			if self.extended_data[:no_end_time] != nil && self.extended_data[:no_end_time] != true
+				dtend = Time.at(self.extended_data[:end_time])
+			else
+				dtend = nil
+			end
+
+			if self.extended_data[:recurrence] == :every_n_days
+				days_between_recurrences = self.extended_data[:days_between_recurrences]
+				
+				if days_between_recurrences.nil?
+					days_between_recurrences = 0
+				end
+
+				dtstart = days_between_recurrences.days.since dtstart
+				if !dtend.nil?
+					dtend = days_between_recurrences.days.since dtend
+				end
+			elsif self.extended_data[:recurrence] == :weekly # same day every week
+				dtstart = 1.week.since dtstart
+				if !dtend.nil?
+					dtend = 1.week.since dtend
+				end
+			elsif self.extended_data[:recurrence] == :monthly # same day every month (day + 1 month)
+				dtstart = 1.month.since dtstart
+				if !dtend.nil?
+					dtend = 1.month.since dtend
+				end
+			elsif self.extended_data[:recurrence] == :monthly_nth_nday # every 1st/2nd/3rd/4th N-day .. or every Nth Nday
+				dtstart = 28.days.since dtstart
+				if !dtend.nil?
+					dtend = 28.days.since dtend
+				end
+			elsif self.extended_data[:recurrence] == :yearly # same day every year (day + 1 year)
+				dtstart = 1.year.since dtstart
+				if !dtend.nil?
+					dtend = 1.year.since dtend
+				end
+			end
+		end
 	end
 end
