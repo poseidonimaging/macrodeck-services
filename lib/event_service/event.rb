@@ -181,6 +181,8 @@ class Event < DataObject
 				end
 			end
 
+			puts "#{self.inspect} - process_recurrence - old: #{self.start_time} - new: #{dtstart}"
+
 			# save values
 			self.start_time = dtstart
 			if !dtend.nil?
