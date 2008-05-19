@@ -180,6 +180,13 @@ class Event < DataObject
 					dtend = 1.year.since dtend
 				end
 			end
+
+			# save values
+			self.start_time = dtstart
+			if !dtend.nil?
+				self.end_time = dtend
+			end
+			self.save!
 		end
 	end
 end

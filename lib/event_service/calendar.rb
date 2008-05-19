@@ -10,6 +10,11 @@ class Calendar < DataObject
 	def self.events_in_category(category_id)
 		events_before_sort = Event.find(:all, :conditions => ["category_id = ?", category_id])
 		if events_before_sort.length > 0
+			events_before_sort.each do |e|
+				if e.concluded?
+					e.process_recurrence
+				end
+			end
 			events_after_sort = EventServiceCommon::CalendarSorting::sort_events_by_start_time(events_before_sort)
 			events_in_category = events_after_sort
 		else
@@ -22,6 +27,11 @@ class Calendar < DataObject
 	def self.upcoming_events_in_category(category_id)
 		events_before_sort = Event.find(:all, :conditions => ["category_id = ?", category_id])
 		if events_before_sort.length > 0
+			events_before_sort.each do |e|
+				if e.concluded?
+					e.process_recurrence
+				end
+			end
 			events_after_sort = EventServiceCommon::CalendarSorting::sort_events_by_start_time(events_before_sort, true)
 			upcoming_events_in_category = events_after_sort
 		else
@@ -43,6 +53,11 @@ class Calendar < DataObject
 	def upcoming_events
 		events_before_sort = Event.find(:all, :conditions => ["parent_id = ?", self.id]) # will have to order specially next
 		if events_before_sort.length > 0
+			events_before_sort.each do |e|
+				if e.concluded?
+					e.process_recurrence
+				end
+			end
 			events_after_sort = EventServiceCommon::CalendarSorting::sort_events_by_start_time(events_before_sort, true)
 			upcoming_events = events_after_sort
 		else
@@ -54,6 +69,11 @@ class Calendar < DataObject
 	def events
 		events_before_sort = Event.find(:all, :conditions => ["parent_id = ?", self.id]) # will have to order specially next
 		if events_before_sort.length > 0
+			events_before_sort.each do |e|
+				if e.concluded?
+					e.process_recurrence
+				end
+			end
 			events_after_sort = EventServiceCommon::CalendarSorting::sort_events_by_start_time(events_before_sort)
 			events = events_after_sort
 		else
