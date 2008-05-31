@@ -22,6 +22,48 @@ class Event < DataObject
 		return self.extended_data[:recurrence]
 	end
 
+	# Returns the hCalendar recurrence data
+	def hcalendar_recurrence
+		parsed = Time.at(self.extended_data[:start_time])
+
+		recurrence_yearly = parsed.strftime("%B ")
+		recurrence_yearly << parsed.day.to_i.ordinalize
+		recurrence_monthly = parsed.day.to_i.ordinalize
+		nth = (parsed.day.to_f/7.0).ceil.ordinalize
+		recurrence_monthly_nth_nday = "#{nth} "
+		recurrence_monthly_nth_nday << parsed.strftime("%A")
+		recurrence_weekly = parsed.strftime("%A")
+
+		rtn = {}
+
+		# ref: <http://www.xfront.com/microformats/hCalendar_part2.html>
+		case self.extended_data[:recurrence]
+		when :weekly
+			freq = "weekly"
+			byday = recurrence_weekly[0..1]
+			rtn[:rrule] = "freq=#{freq};byday=#{byday}"
+			rtn[:msg] = "every #{recurrence_weekly}"
+		when :monthly_nth_nday
+			freq = "daily"
+			interval = "28" # cheating - it's a property of time that every 28 days is the same Nth Nday
+			rtn[:rrule] = "freq=#{freq};interval=#{interval}"
+			rtn[:msg] = "every #{recurrence_monthly_nth_nday}"
+		when :monthly
+			freq = "monthly"
+			bymonthday = parsed.day.to_i
+			rtn[:rrule] = "freq=#{freq};bymonthday=#{bymonthday}"
+			rtn[:msg] = "the #{recurrence_monthly} of every month"
+		when :yearly
+			freq = "yearly"
+			rtn[:rrule] = "freq=#{freq}"
+			rtn[:msg] = "every #{recurrence_yearly}"
+		else
+			rtn[:rrule] = nil
+			rtn[:msg] = nil
+		end
+		return rtn
+	end
+
 	# Sets the recurrence of this event. Available options:
 	# :weekly (occurs on same day of week for every week afterwards)
 	# :monthly (occurs on same day of month for every month afterwards)
