@@ -17,11 +17,6 @@ class Event < DataObject
 		self.title = value
 	end
 
-	# Returns a symbol representing the recurrence value of this event
-	def recurrence
-		return self.extended_data[:recurrence]
-	end
-
 	# Returns the hCalendar recurrence data
 	def hcalendar_recurrence
 		parsed = Time.at(self.extended_data[:start_time])
@@ -74,6 +69,11 @@ class Event < DataObject
 		else
 			self.extended_data[:recurrence] = value
 		end
+	end
+
+	# Returns a symbol representing the recurrence value of this event
+	def recurrence
+		return self.extended_data[:recurrence]
 	end
 
 	# Returns the start time of the event
