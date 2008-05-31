@@ -46,7 +46,8 @@ class Event < DataObject
 		when :monthly
 			freq = "monthly"
 			bymonthday = parsed.day.to_i
-			rtn[:rrule] = "freq=#{freq};bymonthday=#{bymonthday}"
+			bymonth = "1,2,3,4,5,6,7,8,9,10,11,12" # operator bug? specification issue? ...
+			rtn[:rrule] = "freq=#{freq};bymonthday=#{bymonthday};bymonth=#{bymonth}"
 			rtn[:msg] = "the #{recurrence_monthly} of every month"
 		when :yearly
 			freq = "yearly"
