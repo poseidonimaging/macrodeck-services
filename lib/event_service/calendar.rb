@@ -12,15 +12,16 @@ class Calendar < DataObject
 		if events_before_sort.length > 0
 			events_before_sort.each do |e|
 				if e.concluded?
-					e.process_recurrence
+					new_e = e.process_recurrence
+					e = new_e
 				end
 			end
 			events_after_sort = EventServiceCommon::CalendarSorting::sort_events_by_start_time(events_before_sort)
-			events_in_category = events_after_sort
+			events = events_after_sort
 		else
-			events_in_category = nil
+			events = nil
 		end
-		return events_in_category
+		return events
 	end
 
 	# Returns all upcoming events in a specific category
@@ -29,16 +30,17 @@ class Calendar < DataObject
 		if events_before_sort.length > 0
 			events_before_sort.each do |e|
 				if e.concluded?
-					e.process_recurrence
+					new_e = e.process_recurrence
+					e = new_e
 				end
 			end
 			events_after_sort = EventServiceCommon::CalendarSorting::sort_events_by_start_time(events_before_sort, true)
-			upcoming_events_in_category = events_after_sort
+			events = events_after_sort
 		else
-			upcoming_events_in_category = nil
+			events = nil
 		end
 		
-		return upcoming_events_in_category
+		return events
 	end
 
 	# Override the inspect method to give us something a bit more useful.

@@ -231,6 +231,8 @@ class Event < DataObject
 				self.end_time = dtend
 			end
 			self.save!
+
+			return self
 		end
 	end
 end
