@@ -4,7 +4,7 @@ module EventServiceCommon
 	        # takes an array of events and sorts them by their start time
 	        # returns a sorted array
 	        def self.sort_events_by_start_time(events_before_sort, ignore_past_entries = false)
-	        	# Theory:
+					# Theory:
 	                # Create an array containing event times, sort it, and have
 	                # a hash of event times => Event, then iterate array,
 	                # pointing at hash, and build a final array in event time
@@ -12,7 +12,7 @@ module EventServiceCommon
 	                event_times = []
 	                events_by_time = {}
 	                events_before_sort.each do |event|
-							keyed_start_time = [event.start_time][event.id]
+							keyed_start_time = [event.start_time, event.id]
 	                        event_times << keyed_start_time 
 	                        events_by_time["#{event.start_time}-#{event.id}"] = event
 	                end
