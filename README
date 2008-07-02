@@ -1,2 +1,57 @@
-Please see http://developer.macrodeck.com/wiki/Services:Information for the
-most up-to-date version.
+MacroDeck Services
+==================
+
+This is MacroDeck Services, a plugin designed for Ruby on Rails. Services
+provides several libraries of functions (called "services") to Rails
+applications. In particular, it is the glue that makes our Facebook
+application, Places <http://apps.facebook.com/macrodeckplaces/>,
+work. Originally, the plugin was not "written in the Ruby way", so has quite
+a few Java-esque names floating around. We're working on cleaning that mess
+up (and it is a mess). Also, originally, we had the generic data handler
+set up to have a thick line between node containers (DataGroups) and nodes
+(DataItems). This ended up causing many problems in designing applications,
+and such has been thrown out in favor of a redesigned tree-based system called
+DataObjects. Also, since that point, new Rails features have enabled us to do
+a lot of what we tried to do with the separation.
+
+It is also important to know that every DataObject, User, and pretty much
+everything else has an associated Universally Unique IDentifier (UUID). The
+purpose of this is to allow relationships between unlike objects. For example,
+a User can be related to a DataObject (or a child thereof) without needing to
+specify that the field contains a User. The reason for this is that while it is
+possible for two rows in two tables to contain the same primary key (id), it is
+not possible for two rows in two tables to contain the same UUID. Originally,
+we went insane with UUIDs and made it harder on ourselves by not using the
+Rails has_many and belongs_to functionality. We do now though, but older code
+definitely doesn't show it! :)
+
+Anyway, here's the currently working list of services and what they do:
+
+* base_service: The base service that all other services inherit from. Does
+  not do anything.
+* comment_service: Handles wall posts (comments) for other data types.
+* data_service: The storage backend for everything that isn't a file.
+* event_service: Handles events, calendars, and other date/time-related data.
+* navigation_service: Handles breadcrumbs for MacroDeck pages (underdocumented)
+* places_service: Handles cities and places for MacroDeck, currently doesn't
+  do too much, but will be extended in the future to do neat things like
+  geocoding.
+* storage_service: Currently unused service that functions as a file storage
+  backend. Written by a programmer that up and quit on us, so it may not be
+  finished; we haven't had time to check.
+* test_service: A service created as an example, doesn't do anything.
+* user_serivce: Handles users and groups
+* uuid_service: Created due to differences in how Ruby handles the name
+  "UUID" as a class. At one point, the UUID gem was named "UUID", and worked,
+  and a Ruby update came out that made it stop working. Additionally, it lets
+  us extend that Gem (which we include due to the workaround needed to make it
+  work with our Ruby) as needed, search objects for that UUID, etc.
+
+There are also a ton of services in fixme that need QA or conversion to the new
+DataObject system.
+
+We're releasing this so you can play with it; it should be considered very
+fluid and very beta, but we would appreciate anyone working on it that wants to
+help out! It's released under the terms of the GNU General Public License,
+version 2, or at your discretion, any later version, with exceptions (see the
+LICENSE file).

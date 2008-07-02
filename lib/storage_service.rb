@@ -1,4 +1,4 @@
-
+require 'storage_service/storage'
 require 'yaml'
 
 class StorageService < BaseService
@@ -7,7 +7,8 @@ class StorageService < BaseService
 	@serviceID = "com.macrodeck.StorageService"
 	@serviceName = "StorageService"	
 	@serviceVersionMajor = 0
-	@serviceVersionMinor = 1	
+	@serviceVersionMinor = 3
+	@serviceVersionRevision = 20080701
     @serviceUUID = "748fd45d-cd96-41a5-ab9c-6324ad6aedbb"    
     
     # Creates a file (of course, folder is a file too)
