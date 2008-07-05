@@ -18,6 +18,26 @@ class DataObject < ActiveRecord::Base
 	validates_presence_of	:uuid
 	validates_uniqueness_of	:uuid
 
+	# Requires UltraSphinx
+	if DATA_SERVICE_SEARCH_ENABLED
+		echo "%%% DataService Search Enabled"
+		is_indexed :fields => [
+				{ :field => 'title', :sortable => true },
+				{ :field => 'type', :sortable => true },
+				'uuid',
+				'description',
+				'data',
+				'extended_data',
+				'parent_id',
+				'created_at',
+				'updated_at'
+			],
+			:include => [
+				{ :association_name => 'category',		:field => 'title',	:as => 'category_name' }
+			],
+			:delta => true
+	end
+
 	private
 		def set_uuid_if_nil
 			if self.uuid.nil? || self.uuid.empty?
