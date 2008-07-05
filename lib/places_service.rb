@@ -1,7 +1,6 @@
 # This service wraps DataService and other related stuff for
 # the Places application.
 
-require "category"
 require "places_service/city"
 require "places_service/place"
 require "places_service/place_metadata"
