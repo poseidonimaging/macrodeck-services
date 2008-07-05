@@ -19,7 +19,7 @@ class DataObject < ActiveRecord::Base
 	validates_uniqueness_of	:uuid
 
 	# Requires UltraSphinx
-	if Object.const_defined?(:UltraSphinx)
+	if ActiveRecord::Base.respond_to?("is_indexed")
 		echo "%%% DataService Search Enabled"
 		is_indexed :fields => [
 				{ :field => 'title', :sortable => true },
