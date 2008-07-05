@@ -22,8 +22,8 @@ class DataObject < ActiveRecord::Base
 	if ActiveRecord::Base.respond_to?("is_indexed")
 		puts "%%% DataService Search Enabled"
 		is_indexed :fields => [
-				{ :field => 'title', :sortable => true },
-				{ :field => 'type', :sortable => true },
+				'title',
+				'type',
 				'uuid',
 				'description',
 				'data',
