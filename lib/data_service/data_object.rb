@@ -20,7 +20,7 @@ class DataObject < ActiveRecord::Base
 
 	# Requires UltraSphinx
 	if ActiveRecord::Base.respond_to?("is_indexed")
-		echo "%%% DataService Search Enabled"
+		puts "%%% DataService Search Enabled"
 		is_indexed :fields => [
 				{ :field => 'title', :sortable => true },
 				{ :field => 'type', :sortable => true },
