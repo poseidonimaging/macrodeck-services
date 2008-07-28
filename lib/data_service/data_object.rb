@@ -36,6 +36,15 @@ class DataObject < ActiveRecord::Base
 				{ :association_name => 'category',		:field => 'title',	:as => 'category_name' }
 			],
 			:delta => true
+		# Configure UltraSphinx
+		UltraSphinx::Search.excerpting_options = HashWithIndifferentAccess.new({
+			:before_match => "<span class='highlight'>",
+			:after_match => "</span>",
+			:chunk_seperator => "...",
+			:limit => 256,
+			:around => 3,
+			:content_methods => ['description']
+		})
 	end
 
 	private
