@@ -28,7 +28,7 @@ class DataObject < ActiveRecord::Base
 				'description',
 				'data',
 				'extended_data',
-				{ :field => 'parent_id', :as => "parent", :facet => true },
+				{ :field => 'parent_id', :as => "parent" },
 				'created_at',
 				'updated_at'
 			],
