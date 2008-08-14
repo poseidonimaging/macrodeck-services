@@ -33,6 +33,7 @@ class Comments < DataObject
 		item = Comment.new do |i|
 			i.update_attributes(meta.to_hash)
 			i.parent_id = self.id
+			i.category_id = self.category_id
 		end
 		item.message = text
 		item.save!    
