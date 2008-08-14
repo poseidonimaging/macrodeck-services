@@ -56,4 +56,9 @@ class Place < DataObject
 		end
 		return user_list
 	end
+
+	# Points at a view that can render this model
+	def path_of_partial
+		return "models/place"
+	end
 end
