@@ -15,4 +15,13 @@ class Comment < DataObject
 	def message=(msg)
 		return self.data = msg
 	end
+
+	# Handler for a blank title
+	def title
+		if self[:title].nil?
+			return "Untitled Comment"
+		else
+			return self[:title]
+		end
+	end
 end
