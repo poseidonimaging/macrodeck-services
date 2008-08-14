@@ -24,4 +24,9 @@ class Comment < DataObject
 			return self[:title]
 		end
 	end
+
+	# Points to a file to render this
+	def path_of_partial
+		return "models/comment"
+	end
 end
