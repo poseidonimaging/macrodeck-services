@@ -38,4 +38,8 @@ class Comments < DataObject
 		item.save!    
 		return item
 	end
+
+	def path_of_partial
+		return "models/comments"
+	end
 end
