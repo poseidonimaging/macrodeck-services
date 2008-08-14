@@ -2,6 +2,11 @@
 class Event < DataObject
 	acts_as_macrodeck_wall
 
+	# Used for rendering unlike objects in lists; this is what events need to render as
+	def path_of_partial
+		return "models/event"
+	end
+
 	# Override the inspect method to give us something a bit more useful.
 	def inspect
 		return "#<Event:#{title}>"

@@ -39,6 +39,11 @@ class DataObject < ActiveRecord::Base
 			:delta => true
 	end
 
+	# Used for rendering unlike objects in lists; this is the "default"
+	def path_of_partial
+		return "models/data_object"
+	end
+
 	private
 		def set_uuid_if_nil
 			if self.uuid.nil? || self.uuid.empty?
