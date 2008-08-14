@@ -240,4 +240,26 @@ class Event < DataObject
 			return self
 		end
 	end
+
+	# Returns a URL for this object
+	# Options:
+	# :facebook		=> true | false
+	# :action		=> an optional action
+	def url(options = {})
+		if options[:facebook]
+			url = "#{PLACES_FBURL}/calendar/"
+		else
+			url = "/"
+		end
+
+		url << url_sanitize(self.parent.url_part) << "/"
+		
+		if options[:action] != nil && options[:action] != ""
+			url << "#{url_sanitize(options[:action].to_s)}/"
+		else
+			url << "event/"
+		end
+		url << url_sanitize(self.url_part) << "/"
+		return url
+	end
 end
