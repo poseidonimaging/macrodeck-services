@@ -43,4 +43,9 @@ class Comments < DataObject
 	def path_of_partial
 		return "models/comments"
 	end
+
+	# Return this wall's parent's URL since a wall is a page component, sending along options
+	def url(options = {})
+		return self.parent.url(options)
+	end
 end
