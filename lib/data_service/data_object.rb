@@ -44,6 +44,16 @@ class DataObject < ActiveRecord::Base
 		return "models/data_object"
 	end
 
+	# Subclassed function to return a URL for this object
+	def url(options = {})
+		return "/"
+	end
+
+	protected
+		def url_sanitize(str)
+			return str.chomp.strip.downcase.gsub(/[^0-9A-Za-z_\-\s]/, "").gsub(" ", "-")
+		end
+
 	private
 		def set_uuid_if_nil
 			if self.uuid.nil? || self.uuid.empty?

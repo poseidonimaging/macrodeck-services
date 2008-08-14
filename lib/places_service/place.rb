@@ -61,4 +61,30 @@ class Place < DataObject
 	def path_of_partial
 		return "models/place"
 	end
+
+	# Returns a full URL to this model. Options:
+	# :facebook		=> true | false
+	# :action		=> a valid action
+	# :place_action => (optional) a place-contextual action (XXX: Unused?)
+	def url(options = {})
+		if options[:facebook]
+			url = "#{PLACES_FBURL}/"
+		else
+			url = "/"
+		end
+
+		if options[:action] != nil && options[:action] != ""
+			url << "#{url_sanitize(options[:action].to_s)}/"
+		else
+			url << "view/"
+		end
+		url << url_sanitize(self.parent.country) << "/"
+		url << url_sanitize(self.parent.state(:abbreviation => true)) << "/"
+		url << url_sanitize(self.parent.url_part) << "/"
+		url << url_sanitize(self.url_part) << "/"
+		if options[:place_action] != nil && options[:place_action] != ""
+			url << "#{url_sanitize(options[:place_action].to_s)}/"
+		end
+		return url
+	end
 end
