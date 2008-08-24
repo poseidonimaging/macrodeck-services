@@ -90,6 +90,11 @@ class City < DataObject
 		return "us"
 	end
 
+	# Partial
+	def path_of_partial
+		return "models/city"
+	end
+
 ## PRIVATE INSTANCE METHODS ###################################################
 	
 	private
