@@ -25,6 +25,15 @@ class Comments < DataObject
 		if @comments.nil?
 			@comments = Comment.find(:all, :conditions => ["parent_id = ?", self.id], :order => "created_at DESC") # order newest first
 		end
+
+		# workaround for bug that didn't set category id....
+		@comments.each do |c|
+			if c.category_id.nil? && !self.category_id.nil?
+				c.category_id = self.category_id
+				c.save!
+			end
+		end
+
 		return @comments
 	end
 	
