@@ -28,7 +28,9 @@ class Comments < DataObject
 
 		# workaround for bug that didn't set category id....
 		@comments.each do |c|
-			if c.category_id.nil? && !self.category_id.nil?
+			puts "Checking if #{c.inspect} needs fixing... cat ID is '#{c.category_id}'"
+			if (c.category_id.nil? || c.category_id.empty?) && !self.category_id.nil?
+				puts "Changing!"
 				c.category_id = self.category_id
 				c.save!
 			end
