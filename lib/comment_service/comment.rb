@@ -29,4 +29,9 @@ class Comment < DataObject
 	def path_of_partial
 		return "models/comment"
 	end
+
+	# URL is from the parent comments container (wall), which is in turn from the parent of the parent...
+	def url
+		return self.parent.url
+	end
 end
