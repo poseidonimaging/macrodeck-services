@@ -31,7 +31,7 @@ class Comment < DataObject
 	end
 
 	# URL is from the parent comments container (wall), which is in turn from the parent of the parent...
-	def url
-		return self.parent.url
+	def url(options = {})
+		return self.parent.url(options)
 	end
 end
