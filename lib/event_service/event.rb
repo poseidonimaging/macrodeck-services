@@ -262,4 +262,29 @@ class Event < DataObject
 		url << url_sanitize(self.url_part) << "/"
 		return url
 	end
+
+	# Returns a list of all of the people attending this event.
+	def attendees
+		attendee_list = Relationship.find(:all, :conditions => ["target_uuid = ? AND relationship = 'attending'", self.uuid])
+		user_list = []
+		if attendee_list != nil && attendee_list.length > 0
+			attendee_list.each do |attendee|
+				user = User.find(:first, :conditions => ["uuid = ?", attendee.source_uuid])
+				if user != nil
+					user_list << user
+				end
+			end
+		end
+		return user_list
+	end
+
+	# Returns true if the user specified is attending this event.
+	def is_attending?(user)
+		check = Relationship.find(:first, :conditions => ["source_uuid = ? AND target_uuid = ? AND relationship = 'attending'", user.uuid, self.uuid])
+		if check != nil
+			return true
+		else
+			return false
+		end
+	end
 end
