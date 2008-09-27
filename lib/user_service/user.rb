@@ -13,6 +13,8 @@ class User < ActiveRecord::Base
 	has_many	:updated_objects,	:class_name => "DataObject", :foreign_key => "updated_by_id"
 	has_many	:owned_objects,		:class_name => "DataObject", :foreign_key => "owned_by_id"
 
+	has_and_belongs_to_many	:friends,	:class_name => "User", :foreign_key => "friend_id", :join_table => "friends"
+
 	validates_presence_of	:uuid
 	validates_uniqueness_of	:uuid
 
