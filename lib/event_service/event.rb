@@ -259,7 +259,13 @@ class Event < DataObject
 		else
 			url << "event/"
 		end
+
 		url << url_sanitize(self.url_part) << "/"
+		
+		if options[:occurrence] != nil && options[:occurrence] != ""
+			url << "?occurrence=#{options[:occurrence]}"
+		end
+
 		return url
 	end
 
