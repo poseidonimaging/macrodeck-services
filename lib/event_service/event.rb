@@ -263,9 +263,16 @@ class Event < DataObject
 		return url
 	end
 
-	# Returns a list of all of the people attending this event.
-	def attendees
-		attendee_list = Relationship.find(:all, :conditions => ["target_uuid = ? AND relationship = 'attending'", self.uuid])
+	# Returns a list of all of the people attending this event. `occurrence`, if specified, only returns those users
+	# that are attending this specific occurrence.
+	def attendees(occurrence = nil)
+		if occurrence.nil? || self.recurrence.nil? || self.recurrence == :none
+			occurrence_uuid = self.uuid
+		else
+			occurrence_uuid = self.uuid + ":" + occurrence
+		end
+		attendee_list = Relationship.find(:all, :conditions => ["target_uuid = ? AND relationship = 'attending'", occurrence_uuid])
+
 		user_list = []
 		if attendee_list != nil && attendee_list.length > 0
 			attendee_list.each do |attendee|
@@ -278,9 +285,15 @@ class Event < DataObject
 		return user_list
 	end
 
-	# Returns true if the user specified is attending this event.
-	def is_attending?(user)
-		check = Relationship.find(:first, :conditions => ["source_uuid = ? AND target_uuid = ? AND relationship = 'attending'", user.uuid, self.uuid])
+	# Returns true if the user specified is attending this event. `occurrence`, if specified, only returns true if the user is attending
+	# this specific occurrence.
+	def is_attending?(user, occurrence = nil)
+		if occurrence.nil? || self.recurrence.nil? || self.recurrence == :none
+			occurrence_uuid = self.uuid
+		else
+			occurrence_uuid = self.uuid + ":" + occurrence
+		end
+		check = Relationship.find(:first, :conditions => ["source_uuid = ? AND target_uuid = ? AND relationship = 'attending'", user.uuid, occurrence_uuid])
 		if check != nil
 			return true
 		else
