@@ -6,7 +6,6 @@
 # $Id$
 
 require "services"
-require "acts_as_ferret"
 
 #require "rubygems"
 #require_gem "activemerchant"
