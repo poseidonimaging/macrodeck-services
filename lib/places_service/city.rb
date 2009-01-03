@@ -95,6 +95,27 @@ class City < DataObject
 		return "models/city"
 	end
 
+	# Returns a full URL to this model. Options:
+	# :facebook		=> true | false
+	# :action		=> a valid action
+	def url(options = {})
+		if options[:facebook]
+			url = "#{PLACES_FBURL}/"
+		else
+			url = "/"
+		end
+
+		if options[:action] != nil && options[:action] != ""
+			url << "#{url_sanitize(options[:action].to_s)}/"
+		else
+			url << "view/"
+		end
+		url << url_sanitize(self.country) << "/"
+		url << url_sanitize(self.state(:abbreviation => true)) << "/"
+		url << url_sanitize(self.url_part) << "/"
+		return url
+	end
+
 ## PRIVATE INSTANCE METHODS ###################################################
 	
 	private
