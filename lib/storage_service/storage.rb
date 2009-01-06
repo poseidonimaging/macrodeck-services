@@ -2,7 +2,6 @@
 class Storage < ActiveRecord::Base
      # validates_presence_of :creator, :title
     
-    acts_as_ferret :fields => [:tags, :description, :title] 
     
      # write time of storage's creation to updated field
     def after_create
