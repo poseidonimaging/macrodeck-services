@@ -18,6 +18,19 @@ class User < ActiveRecord::Base
 	validates_presence_of	:uuid
 	validates_uniqueness_of	:uuid
 
+	# Returns an array of places that this user patronizes
+	def places_patronized
+		places = []
+		place_rels = Relationship.find(:all, :conditions => ["source_uuid = ? AND relationship = 'patron'", self.uuid])
+		if place_rels
+			place_rels.each do |rel|
+				place = Place.find_by_uuid(rel.target_uuid)
+				places << place unless place.nil?
+			end
+		end
+		return places
+	end
+
 	private
 		# Sets the UUID if it's not already been assigned.
 		def set_uuid_if_not_set
