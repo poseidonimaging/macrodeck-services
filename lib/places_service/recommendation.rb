@@ -26,9 +26,9 @@ class Recommendation
 		elsif other_obj.respond_to?(:weight) && other_obj.weight == self.weight
 			# since we're the same weight, sort by to_s
 			if other_obj.to_s > self.to_s
-				return 1
-			elsif other_obj.to_s < self.to_s
 				return -1
+			elsif other_obj.to_s < self.to_s
+				return 1
 			else
 				return 0
 			end
