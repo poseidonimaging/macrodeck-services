@@ -8,7 +8,21 @@ class Place < DataObject
 
 	# Override the inspect method to give us something a bit more useful.
 	def inspect
-		return "#<Place:#{title}>"
+		return "#<Place:#{self.to_s}>"
+	end
+
+	# Take the place location info and return a string
+	def to_s
+		return self.name + ", " + self.city.name + ", " + self.city.state(:abbreviation => true)
+	end
+
+	# Returns effectively the parent.
+	def city
+		if self.parent.is_a?(City)
+			return self.parent
+		else
+			raise "Place parent is not a city (#{self.uuid})"
+		end
 	end
 
 	# Set's a place's metadata (but not the item's metadata). Can accept either a

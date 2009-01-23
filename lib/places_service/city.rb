@@ -7,7 +7,12 @@ class City < DataObject
 
 	# Override the inspect method to give us something a bit more useful.
 	def inspect
-		return "#<City:#{title}>"
+		return "#<City:#{self.to_s}>"
+	end
+
+	# To string method
+	def to_s
+		return self.name + ", " + self.state(:abbreviation => true)
 	end
 
 	# Get a city's associated state by its category. Specify :abbreviation => true to return
