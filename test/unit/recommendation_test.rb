@@ -1,8 +1,5 @@
 require 'test_helper'
 require 'services'
-Services.startService("uuid_service")
-Services.startService("data_service")
-Services.startService("places_service")
 
 class RecommendationTest < Test::Unit::TestCase
 	def test_00_sort_behavior

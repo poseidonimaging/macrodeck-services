@@ -4,6 +4,7 @@
 require "places_service/city"
 require "places_service/place"
 require "places_service/place_metadata"
+require "places_service/recommendation"
 
 class PlacesService < BaseService
 	@serviceAuthor = "Keith Gable <ziggy@ignition-project.com>"
@@ -11,8 +12,9 @@ class PlacesService < BaseService
 	@serviceName = "PlacesService"	
 	@serviceVersionMajor = 0
 	@serviceVersionMinor = 3
-	@serviceVersionRevision = 20080317
+	@serviceVersionRevision = 20090122
 	@serviceUUID = "4c8c7deb-7e7b-485b-a467-6b7b195895fd"
+	@serviceDepends = ["com.macrodeck.DataService"]
 
 	# Returns true if the city exists, false if the city does not exist.
 	def self.isCity?(city_name, state)
