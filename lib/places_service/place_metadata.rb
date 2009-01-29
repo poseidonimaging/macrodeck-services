@@ -119,4 +119,9 @@ class PlaceMetadata
 		end
 		return res
 	end
+
+	# Returns a human version of the place type.
+	def place_type_to_s
+		return PLACE_TYPES[@type]
+	end
 end
