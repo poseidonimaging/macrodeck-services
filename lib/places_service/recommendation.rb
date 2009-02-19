@@ -4,17 +4,23 @@ class Recommendation
 
 	attr_reader :recommended_item
 	attr_accessor :users_recommending
+	attr_accessor :popularity
 
 	# rec = Recommendation.new(item)
 	def initialize(recommended_item)
 		@recommended_item = recommended_item
 		@users_recommending = []
+		@popularity = 0
 	end
 
-	# Currently calculates this item's weight by the length of the users recommending array
-	# This will be extended in the future.
+	# If popularity is > 0, we compute the weight as 45% of the popularity number
+	# Otherwise, use the length of recommending users.
 	def weight
-		return @users_recommending.length
+		if popularity > 0
+			return (@popularity * 0.45)
+		else
+			return @users_recommending.length
+		end
 	end
 
 	# Handle comparisons
