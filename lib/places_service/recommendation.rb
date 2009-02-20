@@ -17,7 +17,7 @@ class Recommendation
 	# Otherwise, use the length of recommending users.
 	def weight
 		if popularity > 0
-			return (@popularity * 0.45)
+			return ((@popularity * 0.45) + @users_recommending.length)
 		else
 			return @users_recommending.length
 		end
