@@ -71,6 +71,46 @@ class Place < DataObject
 		return user_list
 	end
 
+	# Returns a hash that looks like this:
+	# { :likes => [ User, User, User, ... ], :dislikes => [ User, User, User, ... ] }
+	def ratings
+		rating_list = Relationship.find(:all, :conditions => ["target_uuid = ? AND (relationship = 'like' OR relationship = 'dislike')", self.uuid])
+		rating_hash = { :likes => [], :dislikes => []}
+		if rating_list != nil && rating_list.length > 0
+			rating_list.each do |r|
+				user = User.find(:first, :conditions => ["uuid = ?", r.source_uuid])
+				if user != nil
+					if r.relationship == "like"
+						rating_hash[:likes] << user
+					elsif r.relatsionship == "dislike"
+						rating_hash[:dislikes] << user
+					end
+				end
+			end
+		end
+		return rating_hash
+	end
+
+	# Returns a numerical (0..100) rating of this place.
+	def rating
+		all_ratings = self.ratings
+		num_likes = all_ratings[:likes].length.to_f
+		num_dislikes = all_ratings[:dislikes].length.to_f
+
+		# prevent divide by 0
+		if num_likes > 0
+			# This formula is as follows:
+			# weighted_likes - weighted_dislikes     100
+			# ----------------------------------  X  ---
+			#          weighted_likes                 1
+			#
+			# Currently, dislikes are weighted at 75% of their base value and likes are 50% of their base value.
+			return ( ( ( num_likes * 0.5 - num_dislikes * 0.75 ) / ( num_dislikes * 0.5 ) ) * 100.0 )
+		else
+			return 0.0
+		end
+	end
+
 	# Points at a view that can render this model
 	def path_of_partial
 		return "models/place"
