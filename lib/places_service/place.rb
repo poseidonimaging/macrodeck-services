@@ -98,7 +98,7 @@ class Place < DataObject
 		num_dislikes = all_ratings[:dislikes].length.to_f
 
 		# prevent divide by 0
-		if num_likes > 0
+		if num_likes > 0 && num_dislikes > 0
 			# This formula is as follows:
 			# weighted_likes - weighted_dislikes     100
 			# ----------------------------------  X  ---
@@ -106,6 +106,8 @@ class Place < DataObject
 			#
 			# Currently, dislikes are weighted at 75% of their base value and likes are 50% of their base value.
 			return ( ( ( num_likes * 0.5 - num_dislikes * 0.75 ) / ( num_dislikes * 0.5 ) ) * 100.0 )
+		elsif num_likes > 0 && num_dislikes == 0
+			return 100.0
 		else
 			return 0.0
 		end
