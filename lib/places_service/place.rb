@@ -82,7 +82,7 @@ class Place < DataObject
 				if user != nil
 					if r.relationship == "like"
 						rating_hash[:likes] << user
-					elsif r.relatsionship == "dislike"
+					elsif r.relationship == "dislike"
 						rating_hash[:dislikes] << user
 					end
 				end
