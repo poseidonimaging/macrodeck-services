@@ -120,17 +120,14 @@ class Place < DataObject
 		experience_hash = { :good => [], :bad => []}
 		if experience_list != nil && experience_list.length > 0
 			experience_list.each do |r|
-				user = User.find_by_uuid(r.source_uuid)
-				if user != nil
-					if r.relationship == "good_experience"
-						rating_hash[:good] << user
-					elsif r.relationship == "bad_experience"
-						rating_hash[:bad] << user
-					end
+				if r.relationship == "good_experience"
+					experience_hash[:good] << r
+				elsif r.relationship == "bad_experience"
+					experience_hash[:bad] << r
 				end
 			end
 		end
-		return rating_hash
+		return experience_hash
 	end
 
 	# Returns a numerical (0..100) experience level of this place.
