@@ -78,7 +78,7 @@ class Place < DataObject
 		rating_hash = { :likes => [], :dislikes => []}
 		if rating_list != nil && rating_list.length > 0
 			rating_list.each do |r|
-				user = User.find(:first, :conditions => ["uuid = ?", r.source_uuid])
+				user = User.find_by_uuid(r.source_uuid)
 				if user != nil
 					if r.relationship == "like"
 						rating_hash[:likes] << user
@@ -107,6 +107,43 @@ class Place < DataObject
 			# Currently, dislikes are weighted at 75% of their base value and likes are 50% of their base value.
 			return ( ( ( num_likes * 0.5 - num_dislikes * 0.75 ) / ( num_dislikes * 0.5 ) ) * 100.0 )
 		elsif num_likes > 0 && num_dislikes == 0
+			return 100.0
+		else
+			return 0.0
+		end
+	end
+
+	# Returns a hash that looks like this:
+	# { :good => [ User, User, User, ... ], :bad => [ User, User, User, ... ] }
+	def experiences
+		experience_list = Relationship.find(:all, :conditions => ["target_uuid = ? AND relationship IN ('good_experience','bad_experience')", self.uuid])
+		experience_hash = { :good => [], :bad => []}
+		if experience_list != nil && experience_list.length > 0
+			experience_list.each do |r|
+				user = User.find_by_uuid(r.source_uuid)
+				if user != nil
+					if r.relationship == "good_experience"
+						rating_hash[:good] << user
+					elsif r.relationship == "bad_experience"
+						rating_hash[:bad] << user
+					end
+				end
+			end
+		end
+		return rating_hash
+	end
+
+	# Returns a numerical (0..100) experience level of this place.
+	def experience
+		all_experiences = self.experiences
+		num_good = all_experiences[:good].length.to_f
+		num_bad = all_experiences[:bad].length.to_f
+
+		# prevent divide by 0
+		if num_good > 0 && num_bad > 0
+			# this is a simple number of good out of total. Time needs to be taken into account however.
+			return (num_good / num_good + num_bad) * 100.0
+		elsif num_good > 0 && num_bad == 0
 			return 100.0
 		else
 			return 0.0
