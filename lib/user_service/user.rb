@@ -31,6 +31,22 @@ class User < ActiveRecord::Base
 		return places
 	end
 
+	# Returns a City if the user has a home city, else nil
+	def home_city
+		hcity_rel = Relationship.find(:first, :conditions => ["source_uuid = ? AND relationship = 'home_city'", self.uuid])
+		if hcity_rel
+			return City.find_by_uuid(hcity_rel.target_uuid)
+		end
+	end
+
+	# Returns a City if the user has a secondary city, else nil
+	def secondary_city
+		scity_rel = Relationship.find(:first, :conditions => ["source_uuid = ? AND relationship = 'secondary_city'", self.uuid])
+		if scity_rel
+			return City.find_by_uuid(scity_rel.target_uuid)
+		end
+	end
+
 	private
 		# Sets the UUID if it's not already been assigned.
 		def set_uuid_if_not_set
