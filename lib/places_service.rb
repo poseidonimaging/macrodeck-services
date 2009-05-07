@@ -105,26 +105,31 @@ class PlacesService < BaseService
 		end
 
 		# Create a child Category of state_category
-		city_category = self.getStateCategory(state).create_child({ :title => city_name })
-		
-		if city_category == nil
-			raise "PlacesService critical error: createCity could not create a city category for #{city_name}, #{state}"
+		state_category = Category.getStateCategory(state)
+		if state_category
+			city_category = state_category.create_child({ :title => city_name })
+			
+			if city_category == nil
+				raise "PlacesService critical error: createCity could not create a city category for #{city_name}, #{state}"
+			end
+
+			# Save the URL-part
+			city_category.url_part = self.makeURLPart(city_name)
+			city_category.can_have_items = true
+			city_category.save!
+
+			# Now create a city
+			city = City.new do |c|
+				c.uuid = UUIDService.generateUUID
+				c.category_id = city_category.id
+				c.title = city_name
+			end
+			city.save!
+
+			return city
+		else
+			return nil
 		end
-
-		# Save the URL-part
-		city_category.url_part = self.makeURLPart(city_name)
-		city_category.can_have_items = true
-		city_category.save!
-
-		# Now create a city
-		city = City.new do |c|
-			c.uuid = UUIDService.generateUUID
-			c.category_id = city_category.id
-			c.title = city_name
-		end
-		city.save!
-
-		return city
 	end
 
 	# Returns a list of states as categories.
