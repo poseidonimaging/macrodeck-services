@@ -150,7 +150,7 @@ class Place < DataObject
 	# Returns an array of experiences for the sparkline generator. 0 = bad, 50 = neutral, 100 = positive.
 	def experience_for_sparklines
 		experience_list = Relationship.find(:all, :conditions => ["target_uuid = ? AND relationship IN ('good_experience', 'bad_experience')", self.uuid], :order => "updated_at DESC", :limit => 25)
-		experience_sparkines = []
+		experience_sparklines = []
 		experience_list.each do |e|
 			if e.relationship == "good_experience"
 				experience_sparklines << 100
