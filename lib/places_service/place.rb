@@ -149,8 +149,8 @@ class Place < DataObject
 
 	# Returns an array of experiences for the sparkline generator. 0 = bad, 50 = neutral, 100 = positive.
 	def experience_for_sparklines
-		experience_list = Relationship.find(:all, :conditions => ["target_uuid = ? AND relationship IN ('good_experience', 'bad_experience')", self.uuid], :order => "updated_at ASC")
-		experience_sparklines = []
+		experience_list = Relationship.find(:all, :conditions => ["target_uuid = ? AND relationship IN ('good_experience', 'bad_experience')", self.uuid], :order => "updated_at DESC", :limit => 25)
+		experience_sparkines = []
 		experience_list.each do |e|
 			if e.relationship == "good_experience"
 				experience_sparklines << 100
@@ -158,8 +158,23 @@ class Place < DataObject
 				experience_sparklines << 0
 			end
 		end
-		return experience_sparklines
+		return experience_sparklines.reverse
 	end
+
+	# Returns an array of ratings for the sparkline generator. 0 = bad, 50 = neutral, 100 = positive.
+	def rating_for_sparklines
+		rating_list = Relationship.find(:all, :conditions => ["target_uuid = ? AND relationship IN ('like', 'dislike')", self.uuid], :order => "updated_at DESC", :limit => 25)
+		rating_sparkines = []
+		rating_list.each do |r|
+			if r.relationship == "like"
+				rating_sparklines << 100
+			elsif r.relationship == "dislike"
+				rating_sparklines << 0
+			end
+		end
+		return rating_sparklines.reverse
+	end
+
 
 	# Points at a view that can render this model
 	def path_of_partial
