@@ -164,7 +164,7 @@ class Place < DataObject
 	# Returns an array of ratings for the sparkline generator. 0 = bad, 50 = neutral, 100 = positive.
 	def rating_for_sparklines
 		rating_list = Relationship.find(:all, :conditions => ["target_uuid = ? AND relationship IN ('like', 'dislike')", self.uuid], :order => "updated_at DESC", :limit => 25)
-		rating_sparkines = []
+		rating_sparklines = []
 		rating_list.each do |r|
 			if r.relationship == "like"
 				rating_sparklines << 100
