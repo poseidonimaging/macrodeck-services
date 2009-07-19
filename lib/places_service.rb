@@ -5,6 +5,7 @@ require "places_service/city"
 require "places_service/place"
 require "places_service/place_metadata"
 require "places_service/recommendation"
+require "geokit"
 
 class PlacesService < BaseService
 	@serviceAuthor = "Keith Gable <ziggy@ignition-project.com>"
@@ -12,9 +13,23 @@ class PlacesService < BaseService
 	@serviceName = "PlacesService"	
 	@serviceVersionMajor = 0
 	@serviceVersionMinor = 3
-	@serviceVersionRevision = 20090122
+	@serviceVersionRevision = 20090719
 	@serviceUUID = "4c8c7deb-7e7b-485b-a467-6b7b195895fd"
 	@serviceDepends = ["com.macrodeck.DataService"]
+
+	# Returns latitude and longitude for the specified location (specified by :address => "addr", :city => "city", :state => "state")
+	def geocode(options = {})
+		if options[:address] && options[:city] && options[:state]
+			geoloc = Geokit::Geocoders::MultiGeocoder.geocode("#{options[:address]}, #{options[:city]}, #{options[:state]}")
+			if geoloc.success
+				return [geoloc.lat, geoloc.lng]
+			else
+				return nil
+			end
+		else
+			return nil
+		end
+	end
 
 	# Returns true if the city exists, false if the city does not exist.
 	def self.isCity?(city_name, state)

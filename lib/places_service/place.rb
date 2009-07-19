@@ -206,4 +206,21 @@ class Place < DataObject
 		end
 		return url
 	end
+	
+	# Geocodes this place if required
+	def geocode
+		if self.place_metadata[:latitude] && self.place_metadata[:longitude]
+			return false
+		else
+			# This place isn't geocoded yet.
+			latlng = PlacesService.geocode(:address => self.place_metadata[:address], :city => self.city.name, :state => self.city.state(:abbreviation => true))
+			if latlng
+				self.place_metadata[:latitude] = latlng[0]
+				self.place_metadata[:longitude] = latlng[1]
+				return true
+			else
+				return false
+			end
+		end
+	end
 end
