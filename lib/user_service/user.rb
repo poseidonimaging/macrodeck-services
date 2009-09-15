@@ -5,7 +5,7 @@
 gem "rfacebook", ">= 0.9.3"
 
 class User < ActiveRecord::Base
-	acts_as_facebook_user
+#	acts_as_facebook_user
 
 	before_validation :set_uuid_if_not_set
 
