@@ -125,6 +125,7 @@ class City < DataObject
 	def to_xml
 		builder = Builder::XmlMarkup.new
 		xml = builder.city do |city|
+			city.instruct!
 			city.uuid(self.uuid)
 			city.name(self.name)
 			city.description(self.description)
