@@ -121,6 +121,22 @@ class City < DataObject
 		return url
 	end
 
+	# Returns this city in XML (our own schema).
+	def to_xml
+		builder = Builder::XmlMarkup.new
+		xml = builder.city do |city|
+			city.uuid(self.uuid)
+			city.name(self.name)
+			city.description(self.description)
+			city.state(self.state(:abbreviation => false), :abbreviation => self.state(:abbreviation => true))
+			city.category_uuid(self.category.uuid)
+			city.created_at(self.created_at.to_s(:db))
+			city.updated_at(self.updated_at.to_s(:db))
+		end
+
+		return xml
+	end
+
 ## PRIVATE INSTANCE METHODS ###################################################
 	
 	private
