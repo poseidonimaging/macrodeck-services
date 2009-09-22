@@ -1,8 +1,21 @@
 class Category < ActiveRecord::Base
+	
+	# Allows using name and title interchangably.
+	def name
+		return title
+	end
+	
+	# Allows using name= and title= interchangably.
+	def name=(new_name)
+		title = new_name
+	end
+
 	# update attibutes from metaData object
     def metadata=(objMeta)
         update_attributes(objMeta.to_hash)
     end
+
+	####### TODO: Redo the below with acts_as_tree
 
 	# Returns the parent category. If there is one.
 	def parent
