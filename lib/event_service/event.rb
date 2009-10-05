@@ -186,45 +186,48 @@ class Event < DataObject
 	# if needed
 	def process_recurrence
 		if self.extended_data != nil && self.extended_data[:recurrence] != nil && self.extended_data[:recurrence] != :none
-			# initialize values
-			dtstart = Time.at(self.extended_data[:start_time])
+			# Run a loop over and over until the date is the most recent.
+			while self.concluded?
+				# initialize values
+				dtstart = Time.at(self.extended_data[:start_time])
 
-			if self.extended_data[:no_end_time] != nil && self.extended_data[:no_end_time] != true
-				dtend = Time.at(self.extended_data[:end_time])
-			else
-				dtend = nil
-			end
-
-			if self.extended_data[:recurrence] == :every_n_days
-				days_between_recurrences = self.extended_data[:days_between_recurrences]
-				
-				if days_between_recurrences.nil?
-					days_between_recurrences = 0
+				if self.extended_data[:no_end_time] != nil && self.extended_data[:no_end_time] != true
+					dtend = Time.at(self.extended_data[:end_time])
+				else
+					dtend = nil
 				end
 
-				dtstart = days_between_recurrences.days.since dtstart
-				if !dtend.nil?
-					dtend = days_between_recurrences.days.since dtend
-				end
-			elsif self.extended_data[:recurrence] == :weekly # same day every week
-				dtstart = 1.week.since dtstart
-				if !dtend.nil?
-					dtend = 1.week.since dtend
-				end
-			elsif self.extended_data[:recurrence] == :monthly # same day every month (day + 1 month)
-				dtstart = 1.month.since dtstart
-				if !dtend.nil?
-					dtend = 1.month.since dtend
-				end
-			elsif self.extended_data[:recurrence] == :monthly_nth_nday # every 1st/2nd/3rd/4th N-day .. or every Nth Nday
-				dtstart = 28.days.since dtstart
-				if !dtend.nil?
-					dtend = 28.days.since dtend
-				end
-			elsif self.extended_data[:recurrence] == :yearly # same day every year (day + 1 year)
-				dtstart = 1.year.since dtstart
-				if !dtend.nil?
-					dtend = 1.year.since dtend
+				if self.extended_data[:recurrence] == :every_n_days
+					days_between_recurrences = self.extended_data[:days_between_recurrences]
+					
+					if days_between_recurrences.nil?
+						days_between_recurrences = 0
+					end
+
+					dtstart = days_between_recurrences.days.since dtstart
+					if !dtend.nil?
+						dtend = days_between_recurrences.days.since dtend
+					end
+				elsif self.extended_data[:recurrence] == :weekly # same day every week
+					dtstart = 1.week.since dtstart
+					if !dtend.nil?
+						dtend = 1.week.since dtend
+					end
+				elsif self.extended_data[:recurrence] == :monthly # same day every month (day + 1 month)
+					dtstart = 1.month.since dtstart
+					if !dtend.nil?
+						dtend = 1.month.since dtend
+					end
+				elsif self.extended_data[:recurrence] == :monthly_nth_nday # every 1st/2nd/3rd/4th N-day .. or every Nth Nday
+					dtstart = 28.days.since dtstart
+					if !dtend.nil?
+						dtend = 28.days.since dtend
+					end
+				elsif self.extended_data[:recurrence] == :yearly # same day every year (day + 1 year)
+					dtstart = 1.year.since dtstart
+					if !dtend.nil?
+						dtend = 1.year.since dtend
+					end
 				end
 			end
 
