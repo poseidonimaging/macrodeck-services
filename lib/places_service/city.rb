@@ -75,6 +75,11 @@ class City < DataObject
 		return item
 	end
 
+	# Returns the upcoming events in this city.
+	def upcoming_events
+		return Calendar.upcoming_events_in_category(self.category_id)
+	end
+
 	# Returns 10 newest places.
 	def top_10_newest_places
 		return Place.find(:all, :conditions => ["parent_id = ?", self.id], :order => "created_at DESC", :limit => 10)
