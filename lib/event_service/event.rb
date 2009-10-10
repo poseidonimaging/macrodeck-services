@@ -64,6 +64,24 @@ class Event < DataObject
 		return rtn
 	end
 
+	# Returns an iCalendar fragment. (Specify :full => true for a full iCalendar file)
+	def to_ical(options = {:full => false})
+		output = ""
+		if options[:full]
+			output << "BEGIN:VCALENDAR\r\n"
+			output << "VERSION:2.0\r\n"
+			output << "PRODID:-//MacroDeck//NONSGML The Restless Napkin//EN\r\n"
+		end
+		output << "BEGIN:VEVENT\r\n"
+		output << "DTSTART:" << self.start_time.utc.strftime("%Y%m%dT%H%M%SZ") << "\r\n"
+		output << "DTEND:" << self.end_time.utc.strftime("%Y%m%dT%H%M%SZ") << "\r\n" unless self.no_end_time
+		output << "SUMMARY:" << self.summary << "\r\n"
+		output << "END:VEVENT\r\n"
+		if options[:full]
+			output << "END:VCALENDAR\r\n"
+		end	
+	end
+
 	# Sets the recurrence of this event. Available options:
 	# :weekly (occurs on same day of week for every week afterwards)
 	# :monthly (occurs on same day of month for every month afterwards)
