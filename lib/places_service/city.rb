@@ -5,6 +5,8 @@ class City < DataObject
 	acts_as_macrodeck_wall
 	acts_as_macrodeck_calendarable
 
+	has_many :places
+
 	# Override the inspect method to give us something a bit more useful.
 	def inspect
 		return "#<City:#{self.to_s}>"
@@ -43,18 +45,6 @@ class City < DataObject
 		return self.title
 	end
 
-	# Returns true if there are places; false if not.
-	# Differs from children? in that it only checks stuff with the correct datatype.
-	def places?
-		return !(Place.find(:first, :conditions => ["parent_id = ?", self.id]).empty?)
-	end
-
-	# Returns a list of places (all of them).
-	# If you want to narrow your search, consider using Place.find 
-	def places
-		return Place.find(:all, :conditions => ["parent_id = ?", self.id])
-	end
-	
 	# Creates a place as a subitem of this item.
 	#
 	# == Sample Usage ==
