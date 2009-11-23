@@ -1,5 +1,7 @@
 # This is the representation of a specific event.
 class Event < DataObject
+	# TODO: Validation
+	belongs_to :calendar, :foreign_key => "parent_id"
 	acts_as_macrodeck_wall
 
 	# Used for rendering unlike objects in lists; this is what events need to render as

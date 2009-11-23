@@ -6,6 +6,8 @@
 require 'event_service/calendar_sorting'
 
 class Calendar < DataObject
+	has_many :events, :foreign_key => "parent_id"
+	
 	# Returns all events in a specific category
 	def self.events_in_category(category_id)
 		events_before_sort = Event.find(:all, :conditions => ["category_id = ?", category_id])
@@ -48,10 +50,6 @@ class Calendar < DataObject
 		return "#<Calendar:#{title}>"
 	end
 
-	def events?
-		return !(Event.find(:all, :conditions => ["parent_id = ?", self.id]).empty?)
-	end
-
 	def upcoming_events
 		events_before_sort = Event.find(:all, :conditions => ["parent_id = ?", self.id]) # will have to order specially next
 		if events_before_sort.length > 0
@@ -68,8 +66,8 @@ class Calendar < DataObject
 		return upcoming_events
 	end
 
-	def events
-		events_before_sort = Event.find(:all, :conditions => ["parent_id = ?", self.id]) # will have to order specially next
+	def sorted_events
+		events_before_sort = events # will have to order specially next
 		if events_before_sort.length > 0
 			events_before_sort.each do |e|
 				if e.concluded?
