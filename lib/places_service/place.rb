@@ -5,6 +5,7 @@ require "places_service/place_metadata"
 class Place < DataObject
 	acts_as_macrodeck_wall
 	acts_as_macrodeck_calendarable
+	belongs_to :city, :foreign_key => "parent_id"
 
 	# Override the inspect method to give us something a bit more useful.
 	def inspect
@@ -14,15 +15,6 @@ class Place < DataObject
 	# Take the place location info and return a string
 	def to_s
 		return self.name + ", " + self.city.name + ", " + self.city.state(:abbreviation => true)
-	end
-
-	# Returns effectively the parent.
-	def city
-		if self.parent.is_a?(City)
-			return self.parent
-		else
-			raise "Place parent is not a city (#{self.uuid})"
-		end
 	end
 
 	# Set's a place's metadata (but not the item's metadata). Can accept either a
