@@ -5,7 +5,7 @@ class City < DataObject
 	acts_as_macrodeck_wall
 	acts_as_macrodeck_calendarable
 
-	has_many :places
+	has_many :places, :foreign_key => "parent_id"
 
 	# Override the inspect method to give us something a bit more useful.
 	def inspect
