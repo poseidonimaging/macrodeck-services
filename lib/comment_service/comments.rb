@@ -1,6 +1,7 @@
 # This class is for a group of comments.
 
 class Comments < DataObject
+	has_many :comments, :foreign_key => "parent_id"
 
 	# Override the inspect method to give us something a bit more useful.
 	def inspect
@@ -24,28 +25,6 @@ class Comments < DataObject
 		return @latest_comments
 	end
 
-	# Returns true if the comments exist, false otherwise.
-	def comments?
-		return !(Comment.find(:all, :conditions => ["parent_id = ?", self.id]).empty?)
-	end
-
-	# Returns all of the comments in this comment group 
-	def comments
-		if @comments.nil?
-			@comments = Comment.find(:all, :conditions => ["parent_id = ?", self.id], :order => "created_at DESC") # order newest first
-		end
-
-		# workaround for bug that didn't set category id....
-		@comments.each do |c|
-			if c.category_id.nil? && !self.category_id.nil?
-				c.category_id = self.category_id
-				c.save!
-			end
-		end
-
-		return @comments
-	end
-	
 	# Creates a comment. First parameter is the text second is the Metadata (hash or otherwise)
 	def create_comment(text, meta = Metadata.new)
 		item = Comment.new do |i|
