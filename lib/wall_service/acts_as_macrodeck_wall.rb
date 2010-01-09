@@ -14,12 +14,12 @@ module ActiveRecord
 
 			module InstanceMethods
 				def wall
-					wall = Comments.find_by_parent_id(self.id)
+					wall = Wall.find_by_parent_id(self.id)
 					if wall.nil?
-						wall = Comments.new do |c|
-							c.title = "#{self.title}'s Wall"
-							c.parent_id = self.id
-							c.category_id = self.category_id
+						wall = Wall.new do |w|
+							w.title = "#{self.title}'s Wall"
+							w.parent_id = self.id
+							w.category_id = self.category_id
 						end
 						wall.save!
 					else
