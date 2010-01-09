@@ -1,10 +1,11 @@
 # There's nothing that needs to be done really so this doesn't do anything yet.
 
-require "wall_service/comments"
+require "wall_service/wall"
 require "wall_service/comment"
 require "wall_service/acts_as_macrodeck_wall"
 
 class WallService < BaseService
+	puts "CLASS"
 	@serviceAuthor = "Keith Gable <ziggy@ignition-project.com>"
 	@serviceID = "com.macrodeck.WallService"
 	@serviceName = "WallService"	
