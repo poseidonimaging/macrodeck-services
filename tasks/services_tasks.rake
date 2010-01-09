@@ -1,4 +1,4 @@
-# desc "Explaining what the task does"
-# task :services do
-#   # Task goes here
-# end
+desc "Migrates to using Wall instead of Comments"
+task :migrate_to_walls => :environment do
+	DataObject.update_all("type = 'Wall'", "type = 'Comments'")
+end
