@@ -1,6 +1,7 @@
 # This class is used to represent a Comment within a Wall.
 class Comment < DataObject
 	belongs_to :wall, :foreign_key => "parent_id"
+	named_scope :latest, :order => "`created_at` DESC", :limit => 10
 	before_create :set_category_id
 
 	# Override the inspect method to give us something a bit more useful.
