@@ -1,6 +1,8 @@
-# This class is used to represent a Comment within a group of Comments.
-
+# This class is used to represent a Comment within a Wall.
 class Comment < DataObject
+	belongs_to :wall, :foreign_key => "parent_id"
+	before_create :set_category_id
+
 	# Override the inspect method to give us something a bit more useful.
 	def inspect
 		return "#<Comment:#{title}>"
@@ -16,15 +18,6 @@ class Comment < DataObject
 		return self.data = msg
 	end
 
-	# Handler for a blank title
-	def title
-		if self[:title].nil?
-			return "Untitled Comment"
-		else
-			return self[:title]
-		end
-	end
-
 	# Points to a file to render this
 	def path_of_partial
 		return "models/comment"
@@ -34,4 +27,11 @@ class Comment < DataObject
 	def url(options = {})
 		return self.parent.url(options)
 	end
+
+	private
+		def set_category_id
+			unless parent.nil?
+				self.category_id = parent.category_id
+			end
+		end
 end

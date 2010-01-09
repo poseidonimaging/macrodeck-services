@@ -1,11 +1,11 @@
-# This class is for a group of comments.
-
-class Comments < DataObject
+# This class is for a Wall, which can be attached to numerous data types and
+# contains a bunch of comments.
+class Wall < DataObject
 	has_many :comments, :foreign_key => "parent_id"
 
 	# Override the inspect method to give us something a bit more useful.
 	def inspect
-		return "#<Comments:#{title}>"
+		return "#<Wall:#{title}>"
 	end
 
 	# Returns ten of the latest comments
@@ -25,20 +25,8 @@ class Comments < DataObject
 		return @latest_comments
 	end
 
-	# Creates a comment. First parameter is the text second is the Metadata (hash or otherwise)
-	def create_comment(text, meta = Metadata.new)
-		item = Comment.new do |i|
-			i.update_attributes(meta.to_hash)
-			i.parent_id = self.id
-			i.category_id = self.category_id
-		end
-		item.message = text
-		item.save!    
-		return item
-	end
-
 	def path_of_partial
-		return "models/comments"
+		return "models/wall"
 	end
 
 	# Return this wall's parent's URL since a wall is a page component, sending along options
