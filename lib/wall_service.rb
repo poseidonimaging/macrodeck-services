@@ -5,7 +5,6 @@ require "wall_service/comment"
 require "wall_service/acts_as_macrodeck_wall"
 
 class WallService < BaseService
-	puts "CLASS"
 	@serviceAuthor = "Keith Gable <ziggy@ignition-project.com>"
 	@serviceID = "com.macrodeck.WallService"
 	@serviceName = "WallService"	
