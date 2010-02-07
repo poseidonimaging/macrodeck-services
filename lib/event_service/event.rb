@@ -103,7 +103,7 @@ class Event < DataObject
 
 	# Returns the start time of the event
 	def start_time
-		if !self.extended_data[:start_time].nil?
+		if !self.extended_data.nil? && !self.extended_data[:start_time].nil?
 			start_time = Time.at(self.extended_data[:start_time])
 		else
 			start_time = nil
@@ -153,7 +153,7 @@ class Event < DataObject
 
 	# Returns the start time of the event
 	def end_time
-		if !self.extended_data[:end_time].nil?
+		if !self.extended_data.nil? && !self.extended_data[:end_time].nil?
 			end_time = Time.at(self.extended_data[:end_time])
 		else
 			end_time = nil
