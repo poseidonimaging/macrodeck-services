@@ -139,7 +139,11 @@ class Event < DataObject
 
 	# No specified end time: getter.
 	def no_end_time
+	    if self.extended_data.nil?
+		return false
+	    else
 		return self.extended_data[:no_end_time]
+	    end
 	end
 
 	# No specified end time: setter
